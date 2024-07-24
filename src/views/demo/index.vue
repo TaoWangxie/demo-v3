@@ -1,12 +1,9 @@
 <template>
-  <div class="container">666666666</div>
+  <div class="container">66666666226</div>
 </template>
 
-<script setup lang='ts'>
+<script setup lang="ts">
 import { ref, onMounted, nextTick } from "vue";
-
-
-
 </script>
 
 <style lang="scss" scoped>
