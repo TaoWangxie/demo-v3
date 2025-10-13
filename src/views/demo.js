@@ -584,6 +584,7 @@ function twosum(nums,target){
         }
         for(let i=0;i<arr.length;i++){
             if(used[i]) continue
+            if (i > 0 && arr[i] === arr[i - 1] && !used[i - 1]) continue;
             path.push(arr[i])
             used[i] = true
             stracking(used)
@@ -652,34 +653,26 @@ function print(str){
 
   // 最长回文字串 leecode.5   =======================================
   function huiwenchuan(s){
-    let size = s.length
+    if(s.length < 1) return ''
     let start = 0
-    let len = 0
-    for (let i = 0; i < size; i++) {
-       let left = i - 1
-       let right = i +1
-       while(left >= 0 && right < size && s[left] === s[right]){
-        left --
-        right ++
-       }
-       if(right - left - 1 > len){
-        start = left + 1
-        len = right - left - 1
-       }
+    let maxLen = 1
+    const expandAroundCenter = (left,right)=>{
+        while(left >= 0 && right < s.length && s[left] === s[right]){
+            left--
+            right++
+        }
+        return right - left - 1
     }
-    for (let i = 0; i < size; i++) {
-        let left = i
-        let right = i + 1
-        while(left >= 0 && right < size && s[left] === s[right]){
-         left --
-         right ++
+    for(let i = 0; i<s.length; i++){
+        let len1 = expandAroundCenter(i,i)
+        let len2 = expandAroundCenter(i,i + 1)
+        let curLen = Math.max(len1,len2)
+        if(curLen > maxLen){
+            maxLen = curLen
+            start = i - Math.floor((maxLen-1)/2)
         }
-        if(right - left - 1 > len){
-         start = left + 1
-         len = right - left - 1
-        }
-     }
-     return s.slice(start,start + len )
+    }
+    return s.slice(start,start + maxLen)
   }
 
 // 对输入的字符串：去除其中的字符'b'；去除相邻的'a'和'c' =======================================

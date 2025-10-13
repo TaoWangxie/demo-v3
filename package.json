@@ -15,6 +15,7 @@
     "pinia": "^2.1.6",
     "qiniu-js": "^3.4.1",
     "sass": "^1.66.1",
+    "smooth-signature": "^1.0.15",
     "spritejs": "^3.8.3",
     "vue": "^3.2.47",
     "vue-router": "^4.2.4",

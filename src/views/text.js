@@ -423,34 +423,43 @@ class myPromise {
    * promise并发限制
    */
   
-   function multiRequest(urls, maxnum){
-    let result = new Array(urls.length).fill(null)
-    let count = 0
-    return new Promise((resolve,reject)=>{
-      while(count < maxnum){
-        next()
-      }
-      function next(){
-        count++
-        if(count >= urls.length){
-          !result.includes(false) && resolve(result)
-          return
+  function multiRequest(urls, maxNum) {
+    const results = new Array(urls.length).fill(null); // 保持结果顺序
+    let pendingCount = 0; // 当前进行中的请求数
+    let index = 0;       // 当前待处理URL的索引
+  
+    return new Promise((resolve) => {
+      // 递归启动请求（核心控制逻辑）
+      const next = () => {
+        // 所有URL处理完成且无进行中请求时，返回结果
+        if (index >= urls.length && pendingCount === 0) {
+          resolve(results);
+          return;
         }
-        let url = urls[count]
-        fetch(url).then((res)=>{
-          result[count] = res
-          if(count < urls.length){
-            next()
-          }
-        }).catch((e)=>{
-          result[count] = e
-          if(count < urls.length){
-            next()
-          }
-        })
-      }
-    })
-   }
+  
+        // 动态补充请求（保持最大并发）
+        while (pendingCount < maxNum && index < urls.length) {
+          const currentIndex = index++; // 锁定当前索引
+          pendingCount++;
+          
+          fetch(urls[currentIndex])
+            .then(res => res.json())
+            .then(data => {
+              results[currentIndex] = data; // 按原始顺序存储结果
+            })
+            .catch(error => {
+              results[currentIndex] = error; // 错误也按顺序存储
+            })
+            .finally(() => {
+              pendingCount--;
+              next(); // 当前请求完成后触发下一个
+            });
+        }
+      };
+  
+      next(); // 启动初始任务
+    });
+  }
 
   
     /**
@@ -625,7 +634,7 @@ class myPromise {
   
   
       // 插入排序
-      function charup(arr){
+      function charup(arr){ //[1,4,2,3,6,5]
         for (let i = 0; i < arr.length; i++) {
           for (let j = 0; j < i; j++) {
             if(arr[j] > arr[i]){
@@ -699,20 +708,21 @@ class myPromise {
       }
 
       //取高度嵌套的对象里的指定属性
-      function attr(obj,filed){
-        let res = ''
-        for (let key in obj) {
-            if(key === filed){
-              res = obj[key]
-            }
-            if(typeof obj[key] === 'object'){
-              res = attr(obj[key],filed)
-            }
-            if(res){
-              return res
+      function findNestedValue(obj, field) {
+        // 处理无效输入
+        if (obj === null || typeof obj !== 'object') return null;
+        // 当前层级匹配字段
+        if (obj.hasOwnProperty(field)) {
+            return obj[field];
+        }
+        // 递归搜索子对象
+        for (const key in obj) {
+            if (obj.hasOwnProperty(key) && typeof obj[key] === 'object') {
+                const result = findNestedValue(obj[key], field);
+                if (result !== null) return result; // 找到即返回
             }
         }
-        return null
+        return null; // 未找到
       }
   
       // 打乱数组
@@ -726,21 +736,18 @@ class myPromise {
   
       //获取地址参数
       //https://www.baidu.com/s?wd=js%E5%88%A4%E6%96%AD%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%98%AF%E6%95%B0%E5%AD%97%E8%BF%98%E6%98%AF%E5%AD%97%E6%AF%8D&rsv_spt=1&rsv_iqid=0xa0092c8500095a51&issp=1&f=3&rsv_bp=1&rsv_idx=2&ie=utf-8&rqlang=cn&tn=baiduhome_pg&rsv_dl=ts_0&rsv_enter=1&oq=js&rsv_btype=t&inputT=14334&rsv_t=a40fmtm0SEl8MmdEYF8Eq%2F5fBzZdi%2Fqim4f8idb1CARO9lYwbPAU3avVj5qo%2FZVJiziC&rsv_sug3=34&rsv_sug1=30&rsv_sug7=100&rsv_pq=a978275c00060f1c&rsv_sug2=1&rsv_sug4=14455
-      function getparams(url){
-        let params = url.split('?')[1].split('&')
-        let obj = {}
-        params.map((item)=>{
-            let parm = item.split('=')
-            let key = decodeURIComponent(parm[0])
-            let val = parm[1] ? decodeURIComponent(parm[1]) : null
-            let reg = /^\d+$/
-            if(reg.test(val)){
-                val = +val
-            }
-            obj[key] = val
-        })
-        return obj
+      function getAllParams() {
+        const query = window.location.search.substring(1);
+        const params = {};
+        query.split('&').forEach(pair => {
+          const [key, value] = pair.split('=');
+          if (key) {
+            params[decodeURIComponent(key)] = decodeURIComponent(value || '');
+          }
+        });
+        return params;
       }
+      
 
 
       //获取类型

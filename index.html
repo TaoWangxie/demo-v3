@@ -7,6 +7,13 @@
     <title>demo</title>
   </head>
   <body>
+    <script src="../browser.umd.js"></script>
+    <script src="../vue.umd.js"></script>
+    <script>
+      console.log(TRACK);
+      window.TRACK = TRACK
+      // window.TRACK_vue = TRACK_vue
+    </script>
     <div id="app"></div>
     <script type="module" src="/src/main.ts"></script>
   </body>
