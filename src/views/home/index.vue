@@ -10,7 +10,7 @@
         {{ item.name }} ({{ item.time }})
       </div>
     </div>
-    <div class="btn" @click="submit">提交11</div>
+    <div class="btn" @click="submit">提交</div>
   </div>
 </template>
 <script setup lang="ts">
