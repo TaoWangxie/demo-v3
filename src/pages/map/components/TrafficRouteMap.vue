@@ -571,9 +571,16 @@ const pathCheckboxChange = (val) => {
         trailStartUrl: trailStartUrl,
         trailEndUrl: trailEndUrl,
         clickFn: (point) => {
+          console.log(9999,locationName);
+          
           locationName(point.lat, point.lng).then((res) => {
+            console.log(666);
+            
             const infoContent = `<div class="addressBox">${res}</div>`
             trafficMap.value.openInfoBox(point, infoContent)
+          }).catch(() => {
+            console.log(655555);
+            
           })
         },
         lngName: 'lngBaidu',
@@ -592,6 +599,8 @@ const locationName = (lat, lng) => {
     let location_name = ""
     let new_point = new BMap.Point(lng, lat)
     let gc = new BMap.Geocoder()
+    console.log(new_point);
+    
     gc.getLocation(new_point, (rs) => {
       let addComp = rs.addressComponents,
         province = addComp.province,
@@ -600,6 +609,8 @@ const locationName = (lat, lng) => {
         street = addComp.street,
         streetNumber = addComp.streetNumber ? addComp.streetNumber + "号" : ""
       location_name = province + city + district + street + streetNumber
+      console.log(44, location_name);
+      
       resolve(location_name)
     })
   })
@@ -713,10 +724,11 @@ defineExpose({
       }
       
       .label{
+        display: flex;
+        align-items: center;
         width: 70px;
         font-size: 12px;
         color: #333;
-        line-height: 18px;
         font-weight: 400;
         flex-shrink: 0;
       }
@@ -1057,6 +1069,9 @@ defineExpose({
       font-size: 12px;
     }
     span{
+      display: inline-flex;
+      align-items: center;
+      height: 100%;
       font-size: 18px;
       font-weight: bold;
     }
@@ -1119,6 +1134,9 @@ defineExpose({
   }
   .el-checkbox:last-of-type {
     margin-right: 30px;
+  }
+  .el-checkbox-group{
+    align-items: center !important;
   }
 }
 </style>
