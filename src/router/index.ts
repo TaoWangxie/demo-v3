@@ -1,7 +1,19 @@
 import { createRouter, createWebHistory } from "vue-router";
 
+const baseRoutes = [
+  {
+    path: "/map",
+    name: "map",
+    component: () =>
+      import(/* webpackChunkName: "map" */ "@/pages/map/index.vue"),
+    meta: {
+      index: 0,
+    },
+  },
+];
+
 const router = createRouter({
-  history: createWebHistory("/demo/"), // hash模式:createWebHashHistory，history模式:createWebHistory
+  history: createWebHistory("/"), // hash模式:createWebHashHistory，history模式:createWebHistory
   routes: [
     {
       path: "/",
@@ -16,15 +28,7 @@ const router = createRouter({
         index: 0,
       },
     },
-    {
-      path: "/demo",
-      name: "demo",
-      component: () =>
-        import(/* webpackChunkName: "demo" */ "@/views/demo/index.vue"),
-      meta: {
-        index: 0,
-      },
-    },
+    ...baseRoutes,
   ],
 });
 

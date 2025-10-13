@@ -1,0 +1,44 @@
+<!DOCTYPE html>  
+<html>  
+    <head>  
+        <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />  
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />  
+        <title>Hello, World</title>  
+        <style type="text/css">  
+        html{height:100%}  
+        body{height:100%;margin:0px;padding:0px}  
+        #container{height:100%}  
+        </style>  
+		<script type="text/javascript" src="./map_loader.js"></script>
+    </head>  
+ 
+    <body>  
+        <div id="container"></div> 
+        <script type="text/javascript"> 
+			var map = new BMap.Map("container")
+            var startlongitude = 117.404,
+            startlatitude = 37.225;//鄂尔多斯110.0, 39.82  济南116.98 , 36.67 乌鲁木齐 87.68   43.77
+            var point = new BMap.Point(startlongitude, startlatitude);
+            map.centerAndZoom(point, 10);
+            map.enableScrollWheelZoom();                  // 启用滚轮放大缩小。
+            map.enableContinuousZoom();	
+
+            var path = [{
+                'lng': 117.404,
+                'lat': 37.225
+            }, {
+                'lng': 117.404,
+                'lat': 37.515
+            }, {
+                'lng': 117.435,
+                'lat': 37.931
+            }];
+            var point = [];
+            for (var i = 0; i < path.length; i++) {
+                point.push(new BMap.Point(path[i].lng, path[i].lat));
+            }
+            var pl = new BMap.Polyline(point);
+            map.addOverlay(pl);
+        </script>  
+    </body>  
+</html>
